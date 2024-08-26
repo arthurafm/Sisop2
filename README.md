@@ -1,25 +1,39 @@
-# Trabalho de Sistemas Operacionais 2
+# Sistemas Operacionais II (PT-BR)
 
-Este trabalho é para a cadeira de sistemas operacionais 2 da UFRGS.
-Nele faremos um clone do dropbox usando as bibliotecas nativas do linux como socket e posix threads para a sincronização.
-Além disso é usado como biblioteca de marshaling o [flatbuffers](https://flatbuffers.dev/).
+Esse repositório representa o trabalho da matéria de Sistemas Operacionais II durante o período 2024/1 da UFRGS, sob a tutela do Professor Alberto Schaeffer.
 
-### [Relatório](https://docs.google.com/document/d/1-ptL4HAKw9wUs0s0x6USNVZ0HPW01sTw8iaXfZs3zEs/edit?usp=sharing)
+### Descrição geral do trabalho
 
-## Buildar o projeto
-Esse projeto é feito para linux, então se estiver no windows é requerido o uso de WSL.
-Para a build se usa `cmake`, versão mínima sendo 3.20.
-Usando o VSCODE, basta usar as extensões `CMake` e `CMake Tools`. Se não, basta rodar:
+Este projeto consiste na implementação de um serviço semelhante ao Dropbox, para permitir o compartilhamento e a sincronização automática de arquivos entre diferentes dispositivos de um mesmo usuário. A implementação foi feita com a API TCP sockets do Unix e em C++.
 
-```bash
-# precisa rodar esse comando uma vez
-cmake -S . -B build 
-#roda toda vez que quiser compilar o programa
-cmake --build build
-```
+### Funcionalidades
 
-Os executáveis estarão dentro de build nas pastas client e server.
+A aplicação possui um servidor e um cliente. O servidor é capaz de gerenciar arquivos de diversos usuários remotos. Já o cliente corresponde à parte da aplicação presente na máquina dos usuários, que permite ao usuário acessar remotamente seus arquivos mantidos pelo servidor.
 
-Lembrando que se você está no windows, faça por WSL e instale as extensões do VSCODE no WSL.
+- O servidor é capaz de tratar requisições simultâneas de vários usuários.
+- Um usuário pode utilizar o serviço através de até dois dispositivos distintos simultaneamente.
+- As estruturas de armazenamento de dados no servidor devem ser mantidas em um estado consistente e protegidas de acessos concorrentes.
+- Cada vez que um usuário modifica um arquivo contido no diretório '*sync_dir*' em seu dispositivo, o arquivo é atualizado no servidor e no diretório '*sync_dir*' dos demais dispositivos daquele usuário.
+- Diretórios e arquivos de usuários são restabelecidos quando o servidor é reiniciado.
+- É possível rodar o servidor em replicação passiva, com um servidor primário e diversos backups.
+- Para o processo de escolha de servidor primário em caso de falha, é utilizado o algoritmo de eleição *bully*.
 
-Caso ainda tenha erros no VSCODE, tem essa [resposta no StackOverflow que resolve](https://stackoverflow.com/a/71115284)
+# Operational Systems II (EN-US)
+
+This repository represents the work for the Operating Systems II course during the 2024/1 term at UFRGS, under the guidance of Professor Alberto Schaeffer.
+
+### General Project Description
+
+This project involves implementing a service similar to Dropbox, enabling the sharing and automatic synchronization of files between different devices of the same user. The implementation was done using Unix TCP sockets API and C++.
+
+### Features
+
+The application includes a server and a client. The server is capable of managing files from multiple remote users, while the client is the part of the application on the user's machine that allows remote access to their files maintained by the server.
+
+- The server can handle simultaneous requests from multiple users.
+- A user can use the service from up to two different devices simultaneously.
+- The data storage structures on the server must be kept in a consistent state and protected from concurrent access.
+- Whenever a user modifies a file in the '*sync_dir*' directory on their device, the file is updated on the server and in the '*sync_dir*' directory of the user's other devices.
+- User directories and files are restored when the server is restarted.
+- The server can run in passive replication mode, with a primary server and multiple backups.
+- The *bully* election algorithm is used for selecting the primary server in case of failure.
